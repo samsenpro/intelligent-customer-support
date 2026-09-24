@@ -1,0 +1,22 @@
+[project]
+name = "supportmind-ai-service"
+version = "1.0.0"
+description = "SupportMind AI - AI microservice (RAG, embeddings, vector search, classification, sentiment, summarization)"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+markers = ["pgvector: tests that need a PostgreSQL + pgvector database (PGVECTOR_TEST_DSN)"]
+filterwarnings = ["ignore:Using `httpx` with `starlette.testclient` is deprecated"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM"]
+# B008: Depends() en los argumentos por defecto es el patrón estándar de FastAPI
+# SIM905: las listas de palabras son más legibles como texto que como literal
+ignore = ["B008", "SIM905"]
