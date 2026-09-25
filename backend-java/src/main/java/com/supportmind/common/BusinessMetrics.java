@@ -8,8 +8,13 @@ import org.springframework.stereotype.Component;
 import java.time.Duration;
 
 /**
- * Métricas de negocio y de IA en Micrometer. En Prometheus aparecen como conversation_created_total,
- * ticket_created_total, human_handoff_total, ai_requests_total, ai_errors_total y ai_latency_seconds.
+ * Métricas de negocio y de IA en Micrometer: human_handoff_total, ai_requests_total, ai_errors_total,
+ * ai_latency_seconds, conversations_total y tickets_total.
+ * <p>
+ * OpenMetrics reserva el sufijo {@code _created} (marca de creación de cada contador), así que
+ * "conversation.created" se publicaría como conversation_total. Los nombres de la plataforma
+ * conversation_created_total y ticket_created_total los generan reglas de grabación de Prometheus
+ * (infrastructure/prometheus/rules.yml) a partir de conversations_total y tickets_total.
  */
 @Component
 public class BusinessMetrics {
@@ -21,12 +26,12 @@ public class BusinessMetrics {
     }
 
     public void conversationCreated(String channel) {
-        Counter.builder("conversation.created").description("Conversations created")
+        Counter.builder("conversations").description("Conversations created")
                 .tag("channel", channel).register(registry).increment();
     }
 
     public void ticketCreated(String source, String priority) {
-        Counter.builder("ticket.created").description("Tickets created")
+        Counter.builder("tickets").description("Tickets created")
                 .tag("source", source).tag("priority", priority).register(registry).increment();
     }
 
