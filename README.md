@@ -1,3 +1,5 @@
+**🇪🇸 Español** | [🇬🇧 English](README.en.md)
+
 # SupportMind AI — Intelligent Customer Support Platform
 
 ![Java](https://img.shields.io/badge/Java-21-orange)
