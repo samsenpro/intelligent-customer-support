@@ -4,8 +4,10 @@ from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Similitud mínima por defecto según el proveedor de embeddings: los vectores por hashing de términos
-# dan similitudes mucho más bajas que un modelo neuronal para textos igual de relacionados
-_DEFAULT_MIN_SCORE = {"hash": 0.10, "openai": 0.45}
+# dan similitudes mucho más bajas que un modelo neuronal para textos igual de relacionados. El valor de
+# "openai" está medido con paraphrase-multilingual (Ollama) sobre la base de conocimiento de demo:
+# preguntas ajenas <= 0.28, relevantes >= 0.39. Otro modelo puede necesitar otro valor (RAG_MIN_SCORE)
+_DEFAULT_MIN_SCORE = {"hash": 0.10, "openai": 0.35}
 
 
 class Settings(BaseSettings):
