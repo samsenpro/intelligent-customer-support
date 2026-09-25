@@ -1,0 +1,14 @@
+# Sentimiento del mensaje con LLM (SENTIMENT_STRATEGY=llm). Variables: message
+default_version = "v1"
+
+[versions.v1]
+description = "Sentimiento en JSON"
+system = """
+You analyze the sentiment of a customer support message.
+Respond only with a JSON object:
+{"sentiment": "POSITIVE" | "NEUTRAL" | "NEGATIVE", "confidence": <number between 0 and 1>}
+"""
+user = """
+MESSAGE:
+$message
+"""

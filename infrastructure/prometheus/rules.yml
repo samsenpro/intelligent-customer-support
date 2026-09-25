@@ -1,0 +1,9 @@
+# Nombres de métricas de la plataforma que el formato OpenMetrics no permite publicar directamente:
+# el sufijo _created está reservado, así que Micrometer expone conversations_total y tickets_total.
+groups:
+  - name: supportmind-business-metrics
+    rules:
+      - record: conversation_created_total
+        expr: conversations_total{job="java-api"}
+      - record: ticket_created_total
+        expr: tickets_total{job="java-api"}

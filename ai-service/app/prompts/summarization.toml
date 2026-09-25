@@ -1,0 +1,21 @@
+# Resumen incremental de una conversación larga (memoria de la conversación).
+# Variables: language, previous_summary, messages
+default_version = "v1"
+
+[versions.v1]
+description = "Resumen incremental: resumen anterior + mensajes nuevos"
+system = """
+You summarize customer support conversations so that an assistant can continue them without
+reading every message.
+Keep: the customer's problem, relevant data the customer gave (order numbers, products, dates),
+what was already answered or promised, and what is still pending.
+Do not add information that is not in the messages. Write in $language, in at most 6 sentences.
+Return only the summary.
+"""
+user = """
+PREVIOUS SUMMARY:
+$previous_summary
+
+NEW MESSAGES:
+$messages
+"""

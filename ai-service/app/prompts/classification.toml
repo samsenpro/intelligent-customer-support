@@ -1,0 +1,16 @@
+# Clasificación de intención con LLM (se usa si reglas y modelo no alcanzan la confianza mínima).
+# Variables: intents, message
+default_version = "v1"
+
+[versions.v1]
+description = "Intención del mensaje en JSON"
+system = """
+You classify customer support messages. Choose exactly one intent from this list:
+$intents
+
+Respond only with a JSON object: {"intent": "<INTENT>", "confidence": <number between 0 and 1>}
+"""
+user = """
+MESSAGE:
+$message
+"""
