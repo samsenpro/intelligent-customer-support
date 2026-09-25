@@ -5,7 +5,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Similitud mínima por defecto según el proveedor de embeddings: los vectores por hashing de términos
 # dan similitudes mucho más bajas que un modelo neuronal para textos igual de relacionados
-_DEFAULT_MIN_SCORE = {"hash": 0.12, "openai": 0.45}
+_DEFAULT_MIN_SCORE = {"hash": 0.10, "openai": 0.45}
 
 
 class Settings(BaseSettings):

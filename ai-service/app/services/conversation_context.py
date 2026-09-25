@@ -9,8 +9,9 @@ _ROLE_LABEL = {
     SenderRole.AGENT: "Agent",
     SenderRole.SYSTEM: "System",
 }
-# Una pregunta con menos términos que esto suele ser una continuación ("¿y cuánto tarda?")
-_FOLLOW_UP_MAX_TERMS = 5
+# Una pregunta con tan pocos términos suele ser una continuación ("¿y cuánto tarda?", "¿y el plazo?").
+# Con más términos es una pregunta nueva: ampliarla con el tema anterior recuperaría contexto ajeno
+_FOLLOW_UP_MAX_TERMS = 2
 
 
 @dataclass(frozen=True, slots=True)
@@ -51,7 +52,7 @@ class ConversationContextBuilder:
     def retrieval_query(self, message: str, context: ConversationContext) -> str:
         """Consulta para la búsqueda vectorial. Si la pregunta es una continuación corta se le añade
         el mensaje anterior del cliente, que aporta el tema ("reembolso" en "¿y cuánto tarda?")."""
-        if len(content_stems(message)) >= _FOLLOW_UP_MAX_TERMS:
+        if len(content_stems(message)) > _FOLLOW_UP_MAX_TERMS:
             return message
         previous = next((m.content for m in reversed(context.history) if m.role is SenderRole.CUSTOMER), None)
         return f"{previous}\n{message}" if previous else message

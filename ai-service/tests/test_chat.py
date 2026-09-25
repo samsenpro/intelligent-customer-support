@@ -246,3 +246,19 @@ def test_organization_is_required_for_every_chat(client_factory):
     response = client.post("/api/v1/ai/chat", json=payload, headers=HEADERS)
     assert response.status_code == 422
     assert response.json()["error"]["code"] == "INVALID_REQUEST"
+
+
+def test_a_new_topic_is_not_mixed_with_the_previous_question(client_factory):
+    client, _ = client_factory()
+    history = [
+        {"role": "CUSTOMER", "content": "¿En cuántos días puedo pedir el reembolso?"},
+        {"role": "AI", "content": "Dentro de los 30 días siguientes a la entrega."},
+    ]
+    body = post_chat(client, chat_payload("¿Venden repuestos para tractores agrícolas?", history=history))
+    assert body["status"] == "NO_RELEVANT_CONTEXT"
+
+
+def test_extractive_answers_do_not_repeat_the_section_title(client_factory):
+    client, _ = client_factory()
+    body = post_chat(client, chat_payload("¿En cuántos días puedo pedir el reembolso de un producto?"))
+    assert body["answer"].count("Política de reembolsos") == 1

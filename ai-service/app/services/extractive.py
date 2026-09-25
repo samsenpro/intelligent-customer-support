@@ -17,7 +17,7 @@ class ExtractiveAnswerBuilder:
         best = context.chunks[0].hit
         query = set(content_stems(question))
         candidates: list[tuple[float, int, str]] = []
-        for position, sentence in enumerate(split_sentences(best.content)):
+        for position, sentence in enumerate(split_sentences(_without_title(best.content, best.title))):
             stems = set(content_stems(sentence))
             if not stems:
                 continue
@@ -32,3 +32,10 @@ class ExtractiveAnswerBuilder:
             chosen = sorted(candidates, key=lambda c: c[1])[: self.max_sentences]
         body = " ".join(sentence for _, _, sentence in sorted(chosen, key=lambda c: c[1]))
         return f"{text(Text.EXTRACTIVE_PREFIX, language, title=best.title)} {body}"
+
+
+def _without_title(content: str, title: str) -> str:
+    """El chunking antepone el título de la sección ("Política de reembolsos: ..."); en la respuesta
+    ya se nombra la fuente, así que no se repite."""
+    prefix = f"{title}: "
+    return content[len(prefix):] if content.startswith(prefix) else content
